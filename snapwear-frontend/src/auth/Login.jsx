@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import loginImage from "../assets/login-illustration.png"; 
+import logo from "../assets/logo.png";
+import loginImage from "../assets/login-illustration.png"; // Replace with your image
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -10,104 +11,108 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log({ email, password });
-    // TODO: Connect to your backend
+    // TODO: Connect to backend
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4 py-12">
-      <div className="flex flex-col md:flex-row w-full max-w-5xl bg-white shadow-xl rounded-2xl overflow-hidden">
-        {/* Left Section - Login Form */}
-        <div className="w-full md:w-1/2 p-8 md:p-12">
-          <h2 className="text-3xl font-bold mb-2">Log in to your account</h2>
-          <p className="text-sm text-gray-600 mb-6">
-            Don’t have an account?{" "}
-            <Link to="/register" className="font-semibold underline text-black">
-              Sign up
-            </Link>
-          </p>
+    <div className="min-h-screen flex flex-col md:flex-row bg-white font-poppins relative">
+      {/* Logo Top Left */}
+      <img
+        src={logo}
+        alt="SnapWear Logo"
+        className="absolute top-6 left-6 w-24"
+      />
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium mb-1">Email address</label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full border rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black"
-              />
-            </div>
+      {/* Left Section */}
+      <div className="flex-1 flex flex-col justify-center items-start px-6 md:px-20 py-10">
+        <h1 className="text-3xl font-bold mb-2">Welcome back</h1>
+        <p className="text-gray-600 mb-6">Welcome back! Please enter your details.</p>
 
-            {/* Password */}
+        <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4">
+          {/* Email */}
+          <div>
+            <label className="block text-sm mb-1">Email</label>
+            <input
+              type="email"
+              required
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+            />
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="block text-sm mb-1">Password</label>
             <div className="relative">
-              <label className="block text-sm font-medium mb-1">Password</label>
               <input
                 type={showPassword ? "text" : "password"}
                 required
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full border rounded-md px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-black"
+                className="w-full px-4 py-2 pr-24 border rounded-md focus:outline-none focus:ring-2 focus:ring-black"
               />
               <button
                 type="button"
-                className="absolute right-3 top-9 text-sm text-gray-500"
                 onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-2 text-sm text-gray-500"
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
+          </div>
 
-            {/* Show Password Checkbox */}
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                checked={showPassword}
-                onChange={() => setShowPassword(!showPassword)}
-                className="mr-2"
-              />
-              <label className="text-sm">Show password</label>
-            </div>
+          {/* Remember + Forgot */}
+          <div className="flex items-center justify-between text-sm text-gray-600">
+            <label className="flex items-center gap-2">
+              <input type="checkbox" />
+              Remember for 30 days
+            </label>
+            <Link to="/forgot-password" className="text-black underline">
+              Forgot password?
+            </Link>
+          </div>
 
-            {/* Forgot Password */}
-            <div className="text-right text-sm">
-              <Link to="/forgot-password" className="text-black font-medium underline">
-                Forgot Password?
-              </Link>
-            </div>
+          {/* Sign In */}
+          <button
+            type="submit"
+            className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-900 font-medium"
+          >
+            Sign in
+          </button>
 
-            {/* Google Auth + Submit */}
-            <div className="flex items-center space-x-2">
-              <button
-                type="button"
-                className="w-full flex items-center justify-center border border-gray-400 py-2 rounded-full hover:bg-gray-100"
-              >
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-                  alt="Google"
-                  className="w-5 h-5 mr-2"
-                />
-                Continue with Google
-              </button>
-              <span className="text-sm text-gray-500">or</span>
-              <button
-                type="submit"
-                className="w-full bg-black text-white py-2 px-4 rounded-full hover:bg-gray-900"
-              >
-                Log in
-              </button>
-            </div>
-          </form>
-        </div>
+          {/* Google Sign In */}
+          <button
+            type="button"
+            className="w-full flex items-center justify-center border border-gray-300 py-2 rounded-md hover:bg-gray-100"
+          >
+            <img
+              src="https://img.icons8.com/color/16/000000/google-logo.png"
+              alt="Google icon"
+              className="mr-2"
+            />
+            Sign in with Google
+          </button>
+        </form>
 
-        {/* Right Section - Image */}
-        <div className="hidden md:block md:w-1/2 bg-gray-100">
-          <img
-            src={loginImage}
-            alt="Login visual"
-            className="w-full h-full object-cover"
-          />
-        </div>
+        {/* Sign up link */}
+        <p className="text-sm text-gray-600 mt-6">
+          Don’t have an account?{" "}
+          <Link to="/register" className="text-black underline font-medium">
+            Sign up
+          </Link>
+        </p>
+      </div>
+
+      {/* Right Illustration Section */}
+      <div className="hidden md:block md:w-1/2 h-full">
+        <img
+          src={loginImage}
+          alt="Login Illustration"
+          className="w-full h-full object-cover"
+        />
       </div>
     </div>
   );
