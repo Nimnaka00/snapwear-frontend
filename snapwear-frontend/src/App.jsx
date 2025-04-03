@@ -1,8 +1,8 @@
 import { Routes, Route } from 'react-router-dom'
-import Login from './pages/auth/Login'
-import Register from './pages/auth/Register'
-import ForgotPassword from './pages/auth/ForgotPassword'
-import ResetPassword from './pages/auth/ResetPassword'
+import Login from './auth/Login'
+import Register from './auth/Register'
+import ForgotPassword from './auth/ForgotPassword'
+import ResetPassword from './auth/ResetPassword'
 
 function App() {
   return (
