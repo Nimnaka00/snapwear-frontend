@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import logo from '../../assets/Logo.png';
 import Signup_image from '../../assets/Signup_image.png.png';
+import googleLogo from '../../assets/google-logo.png';
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -31,25 +32,31 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 w-full">
-      <div className="container mx-auto px-4 py-6">
+    <div className="min-h-screen w-full bg-[#F9FAFB] px-6">
+      <div className="max-w-[1200px] mx-auto py-6">
+        {/* Logo */}
         <div className="mb-8">
-        <img src={logo} alt="Logo" className="h-12" />
+          <img src={logo} alt="Logo" className="h-[48px]" />
         </div>
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden max-w-5xl mx-auto flex flex-col md:flex-row">
-          <div className="p-8 md:w-1/2">
-            <div className="w-full max-w-md">
-              <h1 className="text-4xl font-bold mb-4">Create an account</h1>
-              <p className="mb-6">
+
+        {/* Card */}
+        <div className="bg-white shadow-lg rounded-[12px] flex flex-col md:flex-row overflow-hidden max-w-[1024px] mx-auto">
+          {/* Left: Form Section */}
+          <div className="w-full md:w-1/2 px-[32px] py-[32px]">
+            <div className="max-w-[400px]">
+              <h1 className="text-[36px] font-bold mb-[16px]">Create an account</h1>
+              <p className="text-[14px] text-[#374151] mb-[24px]">
                 Already have an account?{' '}
-                <a href="#" className="text-indigo-900 font-medium">
+                <span className="text-[#1E1B4B] font-medium underline hover:text-[#4338CA] cursor-pointer">
                   Log in
-                </a>
+                </span>
               </p>
+
               <form onSubmit={handleSubmit}>
-                <div className="flex gap-4 mb-4">
-                  <div className="w-1/2">
-                    <label htmlFor="firstName" className="block text-gray-600 mb-1">
+                {/* Name fields */}
+                <div className="flex gap-[16px] mb-[16px]">
+                  <div className="w-full">
+                    <label htmlFor="firstName" className="block text-[#4B5563] text-[14px] mb-[4px]">
                       First name
                     </label>
                     <input
@@ -58,12 +65,12 @@ const Register = () => {
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleChange}
-                      className="w-full p-2 border border-gray-300 rounded"
+                      className="w-full px-[8px] py-[8px] border border-[#D1D5DB] rounded text-[14px]"
                       required
                     />
                   </div>
-                  <div className="w-1/2">
-                    <label htmlFor="lastName" className="block text-gray-600 mb-1">
+                  <div className="w-full">
+                    <label htmlFor="lastName" className="block text-[#4B5563] text-[14px] mb-[4px]">
                       Last name
                     </label>
                     <input
@@ -72,13 +79,15 @@ const Register = () => {
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleChange}
-                      className="w-full p-2 border border-gray-300 rounded"
+                      className="w-full px-[8px] py-[8px] border border-[#D1D5DB] rounded text-[14px]"
                       required
                     />
                   </div>
                 </div>
-                <div className="mb-4">
-                  <label htmlFor="email" className="block text-gray-600 mb-1">
+
+                {/* Email */}
+                <div className="mb-[16px]">
+                  <label htmlFor="email" className="block text-[#4B5563] text-[14px] mb-[4px]">
                     Email address
                   </label>
                   <input
@@ -87,13 +96,15 @@ const Register = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded"
+                    className="w-full px-[8px] py-[8px] border border-[#D1D5DB] rounded text-[14px]"
                     required
                   />
                 </div>
-                <div className="flex gap-4 mb-2">
-                  <div className="w-1/2">
-                    <label htmlFor="password" className="block text-gray-600 mb-1">
+
+                {/* Passwords */}
+                <div className="flex gap-[16px] mb-[16px]">
+                  <div className="w-full">
+                    <label htmlFor="password" className="block text-[#4B5563] text-[14px] mb-[4px]">
                       Password
                     </label>
                     <input
@@ -102,12 +113,12 @@ const Register = () => {
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
-                      className="w-full p-2 border border-gray-300 rounded"
+                      className="w-full px-[8px] py-[8px] border border-[#D1D5DB] rounded text-[14px]"
                       required
                     />
                   </div>
-                  <div className="w-1/2">
-                    <label htmlFor="confirmPassword" className="block text-gray-600 mb-1">
+                  <div className="w-full">
+                    <label htmlFor="confirmPassword" className="block text-[#4B5563] text-[14px] mb-[4px]">
                       Confirm your password
                     </label>
                     <input
@@ -116,45 +127,59 @@ const Register = () => {
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      className="w-full p-2 border border-gray-300 rounded"
+                      className="w-full px-[8px] py-[8px] border border-[#D1D5DB] rounded text-[14px]"
                       required
                     />
                   </div>
                 </div>
-                <p className="text-sm text-gray-500 mb-4">
+
+                {/* Note */}
+                <p className="text-[#6B7280] text-[13px] mb-[16px]">
                   Use 8 or more characters with a mix of letters, numbers & symbols
                 </p>
-                <div className="flex items-center mb-6">
+
+                {/* Show Password */}
+                <div className="flex items-center gap-2 mb-[24px]">
                   <input
                     type="checkbox"
                     id="showPassword"
                     checked={showPassword}
                     onChange={togglePasswordVisibility}
-                    className="mr-2"
                   />
-                  <label htmlFor="showPassword" className="flex items-center cursor-pointer">
-                    <span className="mr-2">Show password</span>
+                  <label htmlFor="showPassword" className="text-[#4B5563] text-[14px] flex items-center gap-1 cursor-pointer">
+                    Show password
                     {showPassword ? <EyeIcon size={16} /> : <EyeOffIcon size={16} />}
                   </label>
                 </div>
-                <div className="flex justify-between items-center">
-                  <a href="#" className="text-indigo-900">
-                    Log in instead
-                  </a>
+
+                {/* Buttons */}
+                <div className="flex flex-col gap-[16px]">
                   <button
                     type="submit"
-                    className="bg-indigo-900 text-white py-3 px-6 rounded-full hover:bg-indigo-800 transition"
+                    className="w-full bg-[#1E1B4B] text-white h-[48px] px-[24px] rounded-full font-medium hover:bg-[#3730A3] text-center"
                   >
                     Create an account
+                  </button>
+
+                  <span className="text-[#9CA3AF] font-semibold text-center">OR</span>
+
+                  <button
+                    type="button"
+                    className="w-full border border-[#1E1B4B] text-[#1E1B4B] bg-white h-[48px] px-[24px] rounded-full font-medium hover:bg-[#F3F4F6] text-center flex items-center justify-center gap-2"
+                  >
+                    <img src={googleLogo} alt="Google" className="w-[20px] h-[20px]" />
+                    Login Instead
                   </button>
                 </div>
               </form>
             </div>
           </div>
-          <div className="md:w-1/2 bg-tranparent relative">
+
+          {/* Right: Image */}
+          <div className="w-full md:w-1/2">
             <img
               src={Signup_image}
-              alt="Fashion model in red patterned outfit"
+              alt="Signup Visual"
               className="w-full h-full object-cover"
             />
           </div>
