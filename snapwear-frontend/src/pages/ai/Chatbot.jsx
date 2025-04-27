@@ -3,7 +3,7 @@ import { FiSend } from "react-icons/fi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import aiLogo from "../../assets/ai/ai-logo.png";
 import gradientBg from "../../assets/ai/gradiant.png";
-import axios from "axios"; // ✅ Import Axios
+import axios from "axios";
 
 const Chatbot = () => {
   const [input, setInput] = useState("");
@@ -11,6 +11,7 @@ const Chatbot = () => {
   const [typing, setTyping] = useState(false);
   const [loading, setLoading] = useState(false);
   const [animateStar, setAnimateStar] = useState(false);
+  const [regeneratingIndex, setRegeneratingIndex] = useState(null); // For tracking which AI message is regenerating
 
   const bottomRef = useRef(null);
 
@@ -24,31 +25,34 @@ const Chatbot = () => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, typing]);
 
+  const sendToBackend = async (message) => {
+    const response = await axios.post("http://localhost:8000/api/v1/chat", {
+      message,
+    });
+    return response.data.reply;
+  };
+
   const handleSend = async (e) => {
     e.preventDefault();
     if (input.trim() === "") return;
 
-    const newMessages = [...messages, { role: "me", type: "text", content: input }];
-    setMessages(newMessages);
+    const userMessage = { role: "me", type: "text", content: input };
+    setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setTyping(true);
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:8000/api/v1/chat", {
-        message: input,
-      });
-
-      const aiReply = response.data.reply;
+      const aiReply = await sendToBackend(input);
 
       setTimeout(() => {
         setTyping(false);
         setLoading(false);
         setMessages((prev) => [
           ...prev,
-          { role: "ai", type: "text", content: aiReply },
+          { role: "ai", type: "text", content: aiReply, originalUserInput: input },
         ]);
-      }, 1000); // Optional delay to show typing dots
+      }, 1000);
     } catch (error) {
       console.error("Error contacting AI backend:", error);
       setTyping(false);
@@ -58,6 +62,25 @@ const Chatbot = () => {
         { role: "ai", type: "text", content: "❌ Error talking to AI server." },
       ]);
     }
+  };
+
+  const handleRegenerate = async (index) => {
+    const originalUserInput = messages[index].originalUserInput;
+    if (!originalUserInput) return;
+
+    setRegeneratingIndex(index);
+    try {
+      const newReply = await sendToBackend(originalUserInput);
+
+      setMessages((prev) =>
+        prev.map((msg, i) =>
+          i === index ? { ...msg, content: newReply } : msg
+        )
+      );
+    } catch (error) {
+      console.error("Error regenerating message:", error);
+    }
+    setRegeneratingIndex(null);
   };
 
   return (
@@ -83,34 +106,59 @@ const Chatbot = () => {
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 w-full max-w-4xl overflow-y-auto px-4 py-10 space-y-6 z-10">
+      <div className="flex-1 w-full max-w-4xl overflow-y-auto px-4 py-10 space-y-8 z-10">
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`flex ${msg.role === "me" ? "justify-end" : "justify-start"}`}
+            className={`flex flex-col items-start ${msg.role === "me" ? "items-end" : "items-start"}`}
           >
-            <div
-              className={`px-4 py-2 rounded-md max-w-xs text-sm flex items-center justify-center ${
-                msg.role === "me"
-                  ? "bg-[#ffffff20] text-white border border-white"
-                  : "bg-transparent text-white border border-[#ffffff40]"
-              }`}
-            >
-              {msg.content}
+            <div className="flex items-start">
+              {msg.role === "ai" && (
+                <img
+                  src={aiLogo}
+                  alt="AI Avatar"
+                  className="w-8 h-8 rounded-full mr-2"
+                />
+              )}
+              <div
+                className={`px-4 py-2 rounded-md max-w-xs text-sm flex items-center justify-center ${
+                  msg.role === "me"
+                    ? "bg-[#ffffff20] text-white border border-white"
+                    : "bg-transparent text-white border border-[#ffffff40]"
+                }`}
+              >
+                {regeneratingIndex === index ? (
+                  <div className="w-32 h-5 bg-gray-300 animate-pulse opacity-30"></div>
+                ) : (
+                  msg.content
+                )}
+              </div>
+              {msg.role === "me" && (
+                <img
+                  src="https://ui-avatars.com/api/?name=You"
+                  alt="User Avatar"
+                  className="w-8 h-8 rounded-full ml-2"
+                />
+              )}
             </div>
+
+            {/* Regenerate Button */}
+            {msg.role === "ai" && (
+              <button
+                onClick={() => handleRegenerate(index)}
+                className="text-xs mt-2 ml-10 text-[#D6FFF6] underline hover:text-white"
+                disabled={regeneratingIndex === index}
+              >
+                {regeneratingIndex === index ? "Regenerating..." : "Regenerate"}
+              </button>
+            )}
           </div>
         ))}
 
-        {/* Typing Animation */}
+        {/* Typing Shimmer */}
         {typing && (
           <div className="flex justify-start">
-            <div className="px-4 py-2 rounded-md max-w-xs text-sm bg-transparent text-white border border-[#ffffff40] flex items-center gap-2">
-              <span className="flex items-center gap-1">
-                <span className="animate-bounce">.</span>
-                <span className="animate-bounce [animation-delay:0.2s]">.</span>
-                <span className="animate-bounce [animation-delay:0.4s]">.</span>
-              </span>
-            </div>
+            <div className="px-4 py-2 rounded-md max-w-xs w-40 h-10 bg-gray-300 animate-pulse opacity-30"></div>
           </div>
         )}
 
