@@ -33,7 +33,7 @@ const Register = () => {
   return (
     <div className="min-h-screen bg-[#F9FAFB] w-full">
       <div className="container mx-auto px-[16px] py-[24px]">
-        <div className="mb-[32px]">
+      <div className="mb-[32px]">
           <img src={logo} alt="Logo" className="h-[90px]" />
         </div>
         <div className="bg-white rounded-[12px] shadow-lg overflow-hidden max-w-[999px] mx-auto flex flex-col md:flex-row" style={{ height: '546px', width: '999px' }}>
@@ -134,7 +134,6 @@ const Register = () => {
                   />
                   <label htmlFor="showPassword" className="flex items-center cursor-pointer">
                     <span className="mr-[8px]">Show password</span>
-                    {showPassword ? <EyeIcon size={16} /> : <EyeOffIcon size={16} />}
                   </label>
                 </div>
                 <div className="flex justify-between items-center">
