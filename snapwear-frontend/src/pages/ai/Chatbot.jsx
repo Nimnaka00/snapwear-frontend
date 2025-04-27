@@ -146,14 +146,23 @@ const Chatbot = () => {
               )}
             </div>
 
-            {/* Regenerate Button */}
+            {/* Stylish Regenerate Button */}
             {msg.role === "ai" && (
               <button
                 onClick={() => handleRegenerate(index)}
-                className="text-xs mt-2 ml-10 text-[#D6FFF6] underline hover:text-white"
+                className="flex items-center gap-1 text-xs mt-2 ml-10 text-[#D6FFF6] px-3 py-1 border border-[#D6FFF6] rounded-full hover:bg-[#D6FFF6] hover:text-[#13151B] transition-all duration-300"
                 disabled={regeneratingIndex === index}
               >
-                {regeneratingIndex === index ? "Regenerating..." : "Regenerate"}
+                {regeneratingIndex === index ? (
+                  <>
+                    <AiOutlineLoading3Quarters className="animate-spin" size={14} />
+                    Regenerating...
+                  </>
+                ) : (
+                  <>
+                    🔁 Regenerate
+                  </>
+                )}
               </button>
             )}
           </div>
