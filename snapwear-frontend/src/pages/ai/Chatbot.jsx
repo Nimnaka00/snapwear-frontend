@@ -11,7 +11,7 @@ const Chatbot = () => {
   const [typing, setTyping] = useState(false);
   const [loading, setLoading] = useState(false);
   const [animateStar, setAnimateStar] = useState(false);
-  const [regeneratingIndex, setRegeneratingIndex] = useState(null); // For tracking which AI message is regenerating
+  const [regeneratingIndex, setRegeneratingIndex] = useState(null);
 
   const bottomRef = useRef(null);
 
@@ -22,7 +22,11 @@ const Chatbot = () => {
   }, []);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (bottomRef.current) {
+      setTimeout(() => {
+        bottomRef.current.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
   }, [messages, typing]);
 
   const sendToBackend = async (message) => {
@@ -155,10 +159,17 @@ const Chatbot = () => {
           </div>
         ))}
 
-        {/* Typing Shimmer */}
+        {/* Typing Animation */}
         {typing && (
           <div className="flex justify-start">
-            <div className="px-4 py-2 rounded-md max-w-xs w-40 h-10 bg-gray-300 animate-pulse opacity-30"></div>
+            <div className="px-4 py-2 rounded-md max-w-xs text-sm bg-transparent text-white border border-[#ffffff40] flex items-center gap-2">
+              <span>AI is typing</span>
+              <span className="flex items-center gap-1">
+                <span className="animate-bounce">.</span>
+                <span className="animate-bounce [animation-delay:0.2s]">.</span>
+                <span className="animate-bounce [animation-delay:0.4s]">.</span>
+              </span>
+            </div>
           </div>
         )}
 
@@ -179,12 +190,12 @@ const Chatbot = () => {
         />
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || typing}
           className={`ml-2 p-3 rounded-md bg-[#0e0e0e] hover:bg-[#1f1f1f] border border-[#333] transition flex items-center justify-center ${
-            loading ? "opacity-70 cursor-not-allowed" : ""
+            loading || typing ? "opacity-70 cursor-not-allowed" : ""
           }`}
         >
-          {loading ? (
+          {loading || typing ? (
             <AiOutlineLoading3Quarters className="animate-spin text-[#D6FFF6]" size={20} />
           ) : (
             <FiSend size={20} className="text-[#D6FFF6]" />
