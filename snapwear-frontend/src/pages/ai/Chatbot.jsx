@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { FiSend } from "react-icons/fi";
-import { AiOutlineLoading3Quarters } from "react-icons/ai"; // Spinner Icon
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import aiLogo from "../../assets/ai/ai-logo.png";
 import gradientBg from "../../assets/ai/gradiant.png";
+import axios from "axios"; // ✅ Import Axios
 
 const Chatbot = () => {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [typing, setTyping] = useState(false);
-  const [loading, setLoading] = useState(false); // New: loading spinner state
+  const [loading, setLoading] = useState(false);
   const [animateStar, setAnimateStar] = useState(false);
 
   const bottomRef = useRef(null);
@@ -23,7 +24,7 @@ const Chatbot = () => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, typing]);
 
-  const handleSend = (e) => {
+  const handleSend = async (e) => {
     e.preventDefault();
     if (input.trim() === "") return;
 
@@ -33,14 +34,30 @@ const Chatbot = () => {
     setTyping(true);
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const response = await axios.post("http://localhost:8000/api/v1/chat", {
+        message: input,
+      });
+
+      const aiReply = response.data.reply;
+
+      setTimeout(() => {
+        setTyping(false);
+        setLoading(false);
+        setMessages((prev) => [
+          ...prev,
+          { role: "ai", type: "text", content: aiReply },
+        ]);
+      }, 1000); // Optional delay to show typing dots
+    } catch (error) {
+      console.error("Error contacting AI backend:", error);
       setTyping(false);
       setLoading(false);
       setMessages((prev) => [
         ...prev,
-        { role: "ai", type: "text", content: "👗 I can help you pick the perfect outfit!" },
+        { role: "ai", type: "text", content: "❌ Error talking to AI server." },
       ]);
-    }, 1500);
+    }
   };
 
   return (
