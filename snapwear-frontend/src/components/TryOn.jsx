@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Products from "../components/Products"; // ✅ import Products
+import Products from "../components/Products"; // ✅ Import the Product List component
 
 const TryOn = () => {
   const [userPhoto, setUserPhoto] = useState(null);
@@ -18,23 +18,82 @@ const TryOn = () => {
       </p>
 
       <div className="flex flex-col lg:flex-row gap-10">
-        {/* Left Section */}
+        {/* Left: Upload + Result */}
         <div className="flex-1 space-y-6">
-          {/* Upload Photo */}
-          {/* ... upload user photo and Try Now button like before */}
+          <div className="flex gap-6">
+            {/* Upload Photo */}
+            <div className="w-[180px] h-[270px] bg-[#2b2c2f] rounded-md flex items-center justify-center border border-[#555] overflow-hidden">
+              {userPhoto ? (
+                <img src={userPhoto} alt="User" className="w-full h-full object-cover" />
+              ) : (
+                <label className="text-sm text-[#999] cursor-pointer">
+                  <div className="text-3xl">＋</div>
+                  <p className="text-center mt-1">Upload your photo</p>
+                  <input
+                    type="file"
+                    className="hidden"
+                    onChange={(e) =>
+                      setUserPhoto(URL.createObjectURL(e.target.files[0]))
+                    }
+                  />
+                </label>
+              )}
+            </div>
+
+            {/* Result Placeholder */}
+            <div className="w-[180px] h-[270px] bg-[#2b2c2f] rounded-md border border-[#555] flex items-center justify-center overflow-hidden">
+              {outputPhoto ? (
+                <img src={outputPhoto} alt="Output" className="w-full h-full object-cover" />
+              ) : (
+                <p className="text-sm text-[#666] text-center">AI Preview</p>
+              )}
+            </div>
+          </div>
+
+          {/* Body Type Buttons */}
+          <div className="flex gap-4">
+            {["Upper body", "Lower body", "Dresses"].map((part) => (
+              <button
+                key={part}
+                onClick={() => setBodyPart(part)}
+                className={`px-4 py-2 text-sm border rounded-md ${
+                  bodyPart === part
+                    ? "bg-[#D6FFF6] text-[#13151B]"
+                    : "border-[#D6FFF6] text-[#D6FFF6]"
+                }`}
+              >
+                {part}
+              </button>
+            ))}
+          </div>
+
+          {/* Try Now Button */}
+          <button
+            className={`mt-4 w-[220px] h-[44px] border rounded-md text-sm font-medium ${
+              userPhoto && selectedProduct
+                ? "text-[#FBFBFB] border-[#D6FFF6] hover:bg-[#D6FFF6] hover:text-[#13151B]"
+                : "border-[#555] text-[#777] cursor-not-allowed"
+            }`}
+            disabled={!userPhoto || !selectedProduct}
+            onClick={() =>
+              setOutputPhoto("/assets/ai/tryon-output.png") // Example placeholder
+            }
+          >
+            Try Now
+          </button>
         </div>
 
-        {/* Right Section: Product List */}
+        {/* Right: Product List */}
         <div className="flex-1">
-          <h2 className="text-base mb-4">Select a product for try on!</h2>
-          
-          {/* ✅ Insert Products component here */}
+          <h2 className="text-base mb-8">Select a product for try on!</h2>
+
+          {/* ✅ Products Component */}
           <Products
-            onSelectProduct={setSelectedProduct}
             selectedProduct={selectedProduct}
+            onSelectProduct={setSelectedProduct}
           />
 
-          {/* See all products link */}
+          {/* See All Products */}
           <div className="mt-6 flex justify-center">
             <a
               href="/shop"
