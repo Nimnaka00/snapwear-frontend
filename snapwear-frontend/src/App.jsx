@@ -1,12 +1,20 @@
-import { BrowserRouter } from "react-router-dom";
-import AppRoutes from "./routes/AppRoutes";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Shop from "./components/Shop";
+import TryOn from "./components/TryOn"; 
 
-const App = () => {
+function App() {
   return (
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/tryon" element={<TryOn />} />
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;
