@@ -45,7 +45,7 @@ const Navbar = () => {
         {/* Other Navlinks */}
         <a href="/shop" className="hover:underline">Shop</a>
         <a href="/tryon" className="hover:underline">Virtual Try-On</a>
-        <a href="/stylist" className="hover:underline">AI Stylist</a>
+        <a href="/chatbot" className="hover:underline">AI Stylist</a>
       </div>
 
       {/* Cart and Account */}
