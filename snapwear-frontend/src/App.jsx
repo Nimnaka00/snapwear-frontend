@@ -2,7 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Shop from "./components/Shop";
-import TryOn from "./components/TryOn"; 
+import TryOn from "./pages/ai/TryOn"; 
+import Chatbot from "./pages/ai/Chatbot";
+import ProductPage from "./pages/product/ProductPage";
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/tryon" element={<TryOn />} />
+        <Route path="/chatbot" element={<Chatbot/>}/>
+        <Route path="/product/:id" element={<ProductPage />} />
       </Routes>
     </Router>
   );
