@@ -8,6 +8,7 @@ const TryOn = () => {
   const [outputPhoto, setOutputPhoto] = useState(null);
   const [bodyPart, setBodyPart] = useState("Upper body");
   const [loading, setLoading] = useState(false);
+  const [showAllProducts, setShowAllProducts] = useState(false); // ✅ Added to fix errors
   const fileInputRef = useRef();
 
   const handleTryOn = async () => {
@@ -18,9 +19,8 @@ const TryOn = () => {
 
     try {
       const form = new FormData();
-      // actual File object, not just the URL
       form.append("user_image", fileInputRef.current.files[0]);
-      form.append("product_id", selectedProduct.id);
+      form.append("product_id", selectedProduct._id);
       form.append("body_part", bodyPart);
 
       const res = await fetch("http://localhost:8000/api/v1/tryon", {
@@ -34,9 +34,7 @@ const TryOn = () => {
       }
 
       const { output_url } = await res.json();
-      // prepend host so <img> can load it
       setOutputPhoto(`http://localhost:8000${output_url}`);
-
     } catch (err) {
       console.error("Try-on error:", err);
       alert("Failed to generate try-on. See console for details.");
@@ -50,7 +48,7 @@ const TryOn = () => {
       <h1 className="text-[40px] md:text-[57px] font-medium mb-4">
         Virtual Fitting Room
       </h1>
-      <p className="text-[18px] font-medium text-[#FBFBFB] mb-12 w-[1100px]">
+      <p className="text-[18px] font-medium text-[#FBFBFB] mb-12 max-w-[1100px]">
         Step into your digital fitting room. Our AI blends your photo with your favorite looks for a seamless, personalized try-on experience.
       </p>
 
@@ -59,7 +57,7 @@ const TryOn = () => {
         <div className="flex-1 flex flex-col items-center gap-8">
           <div className="flex gap-[85px]">
             {/* Upload */}
-            <div className="w-[200px] h-[300px] bg-[#6D6D6D] rounded-md overflow-hidden">
+            <div className="w-[200px] h-[300px] bg-snow rounded-md overflow-hidden">
               {userPhoto ? (
                 <img src={userPhoto} className="w-full h-full object-cover" />
               ) : (
@@ -81,7 +79,7 @@ const TryOn = () => {
             </div>
 
             {/* Output */}
-            <div className="w-[200px] h-[300px] bg-[#6D6D6D] rounded-md overflow-hidden flex items-center justify-center">
+            <div className="w-[200px] h-[300px] bg-snow rounded-md overflow-hidden flex items-center justify-center">
               {loading ? (
                 <span className="text-[#D6FFF6]">Loading…</span>
               ) : outputPhoto ? (
@@ -135,15 +133,16 @@ const TryOn = () => {
           <Products
             selectedProduct={selectedProduct}
             onSelectProduct={setSelectedProduct}
+            limit={showAllProducts ? null : 6} // ✅ Pass limit only if not showing all
           />
 
           <div className="mt-6 flex justify-center">
-            <a
-              href="/shop"
+            <button
+              onClick={() => setShowAllProducts((prev) => !prev)}
               className="w-[114px] h-[36px] text-[16px] font-semibold border border-[#D6FFF6] text-[#D6FFF6] rounded-[8px] flex items-center justify-center hover:bg-[#D6FFF6] hover:text-[#13151B] transition"
             >
-              See All
-            </a>
+              {showAllProducts ? "See Less" : "See All"}
+            </button>
           </div>
         </div>
       </div>
