@@ -23,7 +23,7 @@ function App() {
         <Route path="/shop" element={<Shop />} />
         <Route path="/tryon" element={<TryOn />} />
         <Route path="/chatbot" element={<Chatbot/>}/>
-        <Route path="/product/:id" element={<ProductPage />} />
+        <Route path="/product" element={<ProductPage />} />
       </Routes>
     </Router>
   );
