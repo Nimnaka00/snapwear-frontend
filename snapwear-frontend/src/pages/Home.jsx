@@ -1,7 +1,10 @@
 import React from "react";
+import Navbar from "../components/Navbar";
 
 const Home = () => {
   return (
+    <div>
+      <Navbar />
     <div className="w-full min-h-screen flex flex-col items-center justify-center text-center px-4 py-20 bg-white">
       <h1 className="text-4xl md:text-5xl font-bold text-black mb-4">
         Welcome to <span className="text-[#6366F1]">SnapWear</span> 👕
@@ -24,6 +27,7 @@ const Home = () => {
           Try Virtual Outfit
         </a>
       </div>
+    </div>
     </div>
   );
 };
