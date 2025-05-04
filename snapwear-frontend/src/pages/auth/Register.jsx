@@ -27,7 +27,7 @@ const Register = () => {
 
   return (
     <div className="min-h-screen bg-snow px-5 md:px-[80px] py-8">
-      <img src={logo} alt="Logo" className="h-[117px] w-[81.47px] mb-8" />
+      <img src={logo} alt="Logo" className="h-[81.47px] w-[117px] mb-8" />
 
       <div className="mx-auto max-w-[999px] w-full bg-snow rounded-[32px] shadow-[6px_6px_20px_1px_rgba(0,0,0,0.25)] flex flex-col md:flex-row overflow-hidden h-[546px]">
         <div className="flex flex-col justify-center px-6 md:px-12 py-8 w-full md:w-[591px]">
