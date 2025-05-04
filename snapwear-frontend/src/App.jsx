@@ -5,6 +5,8 @@ import Shop from "./components/Shop";
 import TryOn from "./pages/ai/TryOn"; 
 import Chatbot from "./pages/ai/Chatbot";
 import ProductPage from "./pages/product/ProductPage";
+import Register from "./pages/auth/Register";
+
 
 function App() {
   return (
@@ -12,6 +14,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register/>}/>
         <Route path="/shop" element={<Shop />} />
         <Route path="/tryon" element={<TryOn />} />
         <Route path="/chatbot" element={<Chatbot/>}/>
