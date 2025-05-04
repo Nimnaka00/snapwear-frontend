@@ -9,6 +9,7 @@ import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 import ResetPassword from "./pages/auth/ResetPassword";
 import SetNewPassword from "./pages/auth/SetNewPassword";
+import Product from "./components/Product";
 
 
 function App() {
@@ -23,7 +24,8 @@ function App() {
         <Route path="/shop" element={<Shop />} />
         <Route path="/tryon" element={<TryOn />} />
         <Route path="/chatbot" element={<Chatbot/>}/>
-        <Route path="/product" element={<ProductPage />} />
+        <Route path="/product1" element={<Product/>} />
+        <Route path="/product/:id" element={<ProductPage />} />
       </Routes>
     </Router>
   );
