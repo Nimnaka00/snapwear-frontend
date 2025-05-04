@@ -19,7 +19,7 @@ function App() {
         <Route path="/register" element={<Register/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/resetpassword" element={<ResetPassword/>}/>
-        <Route path="/setnewpassword" element={<SetNewPassword/>}/>
+        <Route path="/reset-password/:token" element={<SetNewPassword />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/tryon" element={<TryOn />} />
         <Route path="/chatbot" element={<Chatbot/>}/>
