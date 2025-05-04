@@ -34,7 +34,7 @@ const Login = () => {
       toast.success('Login successful!');
       setTimeout(() => navigate('/'), 1500);
     } catch (err) {
-      toast.error(err.response?.data?.message || '❌ Login failed');
+      toast.error(err.response?.data?.message || 'Login failed');
     }
   };
 
