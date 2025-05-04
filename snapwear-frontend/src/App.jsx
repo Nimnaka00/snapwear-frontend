@@ -14,7 +14,6 @@ import SetNewPassword from "./pages/auth/SetNewPassword";
 function App() {
   return (
     <Router>
-      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register/>}/>
