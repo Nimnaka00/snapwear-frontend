@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import API from '../../utils/api';
 import logo from '../../assets/Logo.png';
 
 const SetNewPassword = () => {
+  const { token } = useParams(); // Get token from URL
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     newPassword: '',
     confirmPassword: ''
@@ -12,9 +19,24 @@ const SetNewPassword = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('New password submitted:', formData);
+
+    if (formData.newPassword !== formData.confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+
+    try {
+      await API.post(`/api/auth/reset-password/${token}`, {
+        newPassword: formData.newPassword,
+      });
+
+      toast.success('✅ Password reset successful');
+      navigate('/login');
+    } catch (error) {
+      toast.error(error.response?.data?.message || '❌ Password reset failed');
+    }
   };
 
   return (
