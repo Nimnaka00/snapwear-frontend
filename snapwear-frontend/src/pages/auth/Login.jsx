@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
 import logo from '../../assets/Logo.png';
 import googleLogo from '../../assets/google-logo.png';
 import SigninImage from '../../assets/Signin_image.png';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -15,9 +21,22 @@ const Login = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login submitted:', formData);
+
+    try {
+      const res = await axios.post('http://localhost:5000/api/auth/login', formData);
+
+      const { token, user } = res.data;
+
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+
+      toast.success('✅ Login successful!');
+      setTimeout(() => navigate('/'), 1500);
+    } catch (err) {
+      toast.error(err.response?.data?.message || '❌ Login failed');
+    }
   };
 
   return (
@@ -42,6 +61,7 @@ const Login = () => {
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full md:w-[543px] h-[48px] border border-dustyGray text-dustyGray text-[16px] font-medium rounded-[8px] px-4"
+                required
               />
             </div>
 
@@ -54,6 +74,7 @@ const Login = () => {
                 value={formData.password}
                 onChange={handleChange}
                 className="w-full md:w-[543px] h-[48px] border border-dustyGray text-dustyGray text-[16px] font-medium rounded-[8px] px-4"
+                required
               />
               <div className="text-right mt-1 w-full md:w-[543px]">
                 <a href="/resetpassword" className="text-russianViolet text-[14px] font-medium underline block text-right">Forgot Password?</a>
