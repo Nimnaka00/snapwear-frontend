@@ -31,7 +31,7 @@ const Login = () => {
       localStorage.setItem('token', token);
       localStorage.setItem('snapwear-user', JSON.stringify(user));
 
-      toast.success('✅ Login successful!');
+      toast.success('Login successful!');
       setTimeout(() => navigate('/'), 1500);
     } catch (err) {
       toast.error(err.response?.data?.message || '❌ Login failed');
