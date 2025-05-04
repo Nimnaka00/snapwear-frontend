@@ -1,12 +1,26 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import API from '../../utils/api';
 import logo from '../../assets/Logo.png';
 
 const ResetPassword = () => {
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Reset link sent to:', email);
+
+    try {
+      setLoading(true);
+      const response = await API.post('/api/auth/forgot-password', { email });
+      toast.success(response.data.message || 'Reset link sent!');
+      setEmail('');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to send reset link');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -33,9 +47,14 @@ const ResetPassword = () => {
 
           <button
             type="submit"
-            className="w-[367px] h-[49.26px] bg-russianViolet text-snow rounded-[8px] text-[16px] font-medium"
+            disabled={loading}
+            className={`w-[367px] h-[49.26px] rounded-[8px] text-[16px] font-medium transition ${
+              loading
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-russianViolet text-snow hover:bg-opacity-90'
+            }`}
           >
-            Send Reset Link
+            {loading ? 'Sending...' : 'Send Reset Link'}
           </button>
         </form>
       </div>
