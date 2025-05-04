@@ -10,6 +10,7 @@ import Register from "./pages/auth/Register";
 const AppRoutes = () => {
   return (
     <Router>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register/>}/>
