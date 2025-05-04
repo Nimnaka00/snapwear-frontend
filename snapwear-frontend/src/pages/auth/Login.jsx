@@ -27,7 +27,7 @@ const Login = () => {
       <div className="mx-auto max-w-[999px] w-full bg-snow rounded-[32px] shadow-[6px_6px_20px_1px_rgba(0,0,0,0.25)] flex flex-col md:flex-row overflow-hidden h-[546px]">
         <div className="flex flex-col justify-center px-6 md:px-12 py-8 w-full md:w-[591px]">
           <h1 className="text-[38px] font-semibold leading-[58px] text-textMain mb-2">Log in to your account</h1>
-          <p className="text-[16px] font-medium text-textMain mb-6">
+          <p className="text-[16px] font-medium text-textMain mb-2">
             Don’t have an account?{' '}
             <a href="/register" className="ml-[13px] underline">Sign up</a>
           </p>
@@ -55,8 +55,8 @@ const Login = () => {
                 onChange={handleChange}
                 className="w-full md:w-[543px] h-[48px] border border-dustyGray text-dustyGray text-[16px] font-medium rounded-[8px] px-4"
               />
-              <div className="text-right mt-1">
-                <a href="/forgot-password" className="text-russianViolet text-[14px] font-medium underline">Forgot Password?</a>
+              <div className="text-right mt-1 w-full md:w-[543px]">
+                <a href="/forgot-password" className="text-russianViolet text-[14px] font-medium underline block text-right">Forgot Password?</a>
               </div>
             </div>
 
@@ -70,10 +70,10 @@ const Login = () => {
               <label htmlFor="showPassword" className="text-textMain text-[16px] font-medium">Show password</label>
             </div>
 
-            <div className="flex flex-wrap gap-4 items-center">
+            <div className="flex gap-4 items-center w-full md:w-[543px]">
               <button
                 type="button"
-                className="flex items-center gap-2 border border-darkVoid text-textMain text-[16px] font-medium rounded-full px-6 h-[48px]"
+                className="flex items-center justify-center gap-2 border border-darkVoid text-textMain text-[16px] font-medium rounded-full h-[64px] w-[256px]"
               >
                 <img src={googleLogo} alt="Google" className="h-5 w-5" />
                 Continue with Google
@@ -81,7 +81,7 @@ const Login = () => {
               <span className="text-dustyGray">or</span>
               <button
                 type="submit"
-                className="bg-russianViolet text-snow px-6 h-[48px] rounded-full text-[16px] font-medium"
+                className="bg-russianViolet text-snow h-[64px] w-[256px] rounded-full text-[16px] font-medium"
               >
                 Log in
               </button>
