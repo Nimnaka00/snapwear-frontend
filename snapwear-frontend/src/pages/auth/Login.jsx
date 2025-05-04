@@ -56,7 +56,7 @@ const Login = () => {
                 className="w-full md:w-[543px] h-[48px] border border-dustyGray text-dustyGray text-[16px] font-medium rounded-[8px] px-4"
               />
               <div className="text-right mt-1 w-full md:w-[543px]">
-                <a href="/forgot-password" className="text-russianViolet text-[14px] font-medium underline block text-right">Forgot Password?</a>
+                <a href="/resetpassword" className="text-russianViolet text-[14px] font-medium underline block text-right">Forgot Password?</a>
               </div>
             </div>
 
