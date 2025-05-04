@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import logo from '../../assets/Logo.png';
 import SignupImage from '../../assets/Signup_image.png';
+import API from '../../utils/api';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -28,34 +28,34 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error('❌ Passwords do not match');
       return;
     }
 
     try {
       // Register
-      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/register`, {
+      await API.post('/api/auth/register', {
         firstName: formData.firstName,
         lastName: formData.lastName,
-        email: formData.email,
-        password: formData.password,
-      });
-
-      // Auto-login
-      const loginRes = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
         email: formData.email,
         password: formData.password
       });
 
-      // Save token & user info
-      localStorage.setItem("snapwear-token", loginRes.data.token);
-      localStorage.setItem("snapwear-user", JSON.stringify(loginRes.data.user));
+      // Auto-login
+      const loginRes = await API.post('/api/auth/login', {
+        email: formData.email,
+        password: formData.password
+      });
 
-      toast.success("Account created successfully!");
+      localStorage.setItem('snapwear-token', loginRes.data.token);
+      localStorage.setItem('snapwear-user', JSON.stringify(loginRes.data.user));
+
+      toast.success('🎉 Account created successfully!');
       navigate('/');
     } catch (error) {
-      toast.error(error.response?.data?.message || "Registration failed");
+      toast.error(error.response?.data?.message || '❌ Registration failed');
     }
   };
 
@@ -139,7 +139,9 @@ const Register = () => {
               </div>
             </div>
 
-            <p className="text-[16px] text-dustyGray font-medium">Use 8 or more characters with a mix of letters, numbers & symbols</p>
+            <p className="text-[16px] text-dustyGray font-medium">
+              Use 8 or more characters with a mix of letters, numbers & symbols
+            </p>
 
             <div className="flex items-center gap-2">
               <input
