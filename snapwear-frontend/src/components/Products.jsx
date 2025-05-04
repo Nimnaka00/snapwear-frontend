@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Products = ({ selectedProduct, onSelectProduct }) => {
+const Products = ({ selectedProduct, onSelectProduct, limit }) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -11,13 +11,15 @@ const Products = ({ selectedProduct, onSelectProduct }) => {
       .catch((err) => console.error("Error loading products:", err));
   }, []);
 
+  const displayedProducts = limit ? products.slice(0, limit) : products;
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-      {products.map((product) => (
+      {displayedProducts.map((product) => (
         <div
           key={product._id}
           onClick={() => onSelectProduct(product)}
-          className={`cursor-pointer w-[180px] h-[220px] rounded-[8px] border border-[#D6FFF6] flex flex-col  justify-between p-2 bg-[#1b1d25] ${
+          className={`cursor-pointer w-[180px] h-[220px] rounded-[8px] border border-[#D6FFF6] flex flex-col justify-between p-2 bg-cardBg ${
             selectedProduct?._id === product._id
               ? "border-[#D6FFF6]"
               : "border-transparent"
@@ -29,7 +31,9 @@ const Products = ({ selectedProduct, onSelectProduct }) => {
             className="w-full h-[120px] object-contain mb-2"
           />
           <p className="text-[16px] font-bold">{product.name}</p>
-          <p className="text-[16px] font-medium">Price: LKR {product.price}.00</p>
+          <p className="text-[16px] font-medium">
+            Price: LKR {product.price}.00
+          </p>
         </div>
       ))}
     </div>
