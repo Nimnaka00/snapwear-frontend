@@ -55,7 +55,7 @@ const Shop = () => {
         {filteredProducts.map((product) => (
           <div
             key={product._id}
-            className="w-[365px] h-[470px] rounded-[8px] border border-[#D6FFF6] flex flex-col items-center justify-between p-6 bg-[#1b1d25]"
+            className="w-[365px] h-[470px] rounded-[8px] border border-[#D6FFF6] flex flex-col items-center justify-between p-6 bg-cardBg"
           >
             <img
               src={product.imageUrl}
