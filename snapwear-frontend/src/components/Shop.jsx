@@ -1,10 +1,25 @@
-import React, { useState } from "react";
-import products from "../data/products"; // ✅ updated relative path
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const categories = ["View all", "Men", "Women", "Kids"];
 
 const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState("View all");
+  const [products, setProducts] = useState([]);
+
+  // Fetch products from backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/products");
+        setProducts(res.data);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const filteredProducts =
     selectedCategory === "View all"
@@ -39,18 +54,18 @@ const Shop = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 place-items-center">
         {filteredProducts.map((product) => (
           <div
-            key={product.id}
+            key={product._id}
             className="w-[365px] h-[470px] rounded-[8px] border border-[#D6FFF6] flex flex-col items-center justify-between p-6 bg-[#1b1d25]"
           >
             <img
-              src={product.image}
+              src={product.imageUrl}
               alt={product.name}
               className="h-[252px] object-contain"
             />
             <div className="text-center mt-4 space-y-1">
               <h2 className="text-[16px] font-bold">{product.name}</h2>
               <p className="text-[16px] font-extralight">{product.category}</p>
-              <p className="text-[16px] font-medium">Price : {product.price}</p>
+              <p className="text-[16px] font-medium">Price : LKR {product.price}.00</p>
             </div>
             <button className="mt-4 w-[110px] h-[44px] border border-[#D6FFF6] text-[#D6FFF6] text-[16px] font-medium rounded-md hover:bg-[#D6FFF6] hover:text-[#13151B] transition">
               Add to cart
