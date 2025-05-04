@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import logo from '../../assets/Logo.png';
 import SignupImage from '../../assets/Signup_image.png';
 
 const Register = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -20,9 +26,37 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    try {
+      // Register
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/register`, {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+      });
+
+      // Auto-login
+      const loginRes = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
+        email: formData.email,
+        password: formData.password
+      });
+
+      // Save token & user info
+      localStorage.setItem("snapwear-token", loginRes.data.token);
+      localStorage.setItem("snapwear-user", JSON.stringify(loginRes.data.user));
+
+      toast.success("Account created successfully!");
+      navigate('/');
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Registration failed");
+    }
   };
 
   return (
@@ -47,6 +81,7 @@ const Register = () => {
                   id="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
+                  required
                   className="w-full md:w-[259px] h-[48px] border border-dustyGray text-dustyGray text-[16px] font-medium rounded-[8px] px-4"
                 />
               </div>
@@ -58,6 +93,7 @@ const Register = () => {
                   id="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
+                  required
                   className="w-full md:w-[259px] h-[48px] border border-dustyGray text-dustyGray text-[16px] font-medium rounded-[8px] px-4"
                 />
               </div>
@@ -71,6 +107,7 @@ const Register = () => {
                 id="email"
                 value={formData.email}
                 onChange={handleChange}
+                required
                 className="w-full md:w-[543px] h-[48px] border border-dustyGray text-dustyGray text-[16px] font-medium rounded-[8px] px-4"
               />
             </div>
@@ -84,6 +121,7 @@ const Register = () => {
                   id="password"
                   value={formData.password}
                   onChange={handleChange}
+                  required
                   className="w-full md:w-[259px] h-[48px] border border-dustyGray text-dustyGray text-[16px] font-medium rounded-[8px] px-4"
                 />
               </div>
@@ -95,6 +133,7 @@ const Register = () => {
                   id="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
+                  required
                   className="w-full md:w-[259px] h-[48px] border border-dustyGray text-dustyGray text-[16px] font-medium rounded-[8px] px-4"
                 />
               </div>
