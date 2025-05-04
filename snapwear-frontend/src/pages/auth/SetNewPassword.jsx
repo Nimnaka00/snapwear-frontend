@@ -32,10 +32,10 @@ const SetNewPassword = () => {
         newPassword: formData.newPassword,
       });
 
-      toast.success('✅ Password reset successful');
+      toast.success('Password reset successful');
       navigate('/login');
     } catch (error) {
-      toast.error(error.response?.data?.message || '❌ Password reset failed');
+      toast.error(error.response?.data?.message || 'Password reset failed');
     }
   };
 
