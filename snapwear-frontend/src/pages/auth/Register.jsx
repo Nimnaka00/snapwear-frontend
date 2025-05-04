@@ -30,7 +30,7 @@ const Register = () => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      toast.error('❌ Passwords do not match');
+      toast.error('Passwords do not match');
       return;
     }
 
@@ -55,7 +55,7 @@ const Register = () => {
       toast.success('🎉 Account created successfully!');
       navigate('/');
     } catch (error) {
-      toast.error(error.response?.data?.message || '❌ Registration failed');
+      toast.error(error.response?.data?.message || 'Registration failed');
     }
   };
 
