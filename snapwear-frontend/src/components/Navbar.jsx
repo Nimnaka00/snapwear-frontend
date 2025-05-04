@@ -14,7 +14,7 @@ const Navbar = () => {
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('snapwear-user'));
     setUser(storedUser);
-  }, []);
+  }, [location.pathname]);
 
   const handleProtectedRoute = (path) => {
     if (user) {
@@ -27,8 +27,8 @@ const Navbar = () => {
   };
 
   const navLinkStyle = (path) => `relative inline-block text-snow font-medium overflow-hidden
-    ${location.pathname === path ? 'after:content-[""] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:w-full after:bg-mintGreen' : ''} 
-    before:content-[''] before:absolute before:left-0 before:bottom-0 before:h-[3px] before:w-0 
+    ${location.pathname === path ? 'after:content-[""] after:absolute after:left-0 after:bottom-[-6px] after:h-[2px] after:w-full after:bg-mintGreen' : ''} 
+    before:content-[''] before:absolute before:left-0 before:bottom-[-6px] before:h-[2px] before:w-0 
     before:bg-mintGreen before:transition-all before:duration-500 hover:before:w-full before:rounded-full`;
 
   return (
@@ -49,10 +49,11 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center space-x-6 text-snow font-poppins font-medium text-[16px]">
+          {/* Categories */}
           <div className="relative">
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className={`flex items-center gap-1 focus:outline-none transition-transform hover:scale-105 relative  hover:before:animate-[bounce_0.5s]`}
+              className="flex items-center gap-1 focus:outline-none transition-transform"
             >
               Categories
               <FiChevronDown
@@ -65,9 +66,9 @@ const Navbar = () => {
                 dropdownOpen ? 'opacity-100 scale-100 visible translate-y-0' : 'opacity-0 scale-90 invisible -translate-y-2'
               }`}
             >
-              <p className="cursor-pointer hover:underline transition-transform hover:scale-105">Men</p>
-              <p className="cursor-pointer hover:underline transition-transform hover:scale-105">Women</p>
-              <p className="cursor-pointer hover:underline transition-transform hover:scale-105">Kids</p>
+              <p className="cursor-pointer hover:underline">Men</p>
+              <p className="cursor-pointer hover:underline">Women</p>
+              <p className="cursor-pointer hover:underline">Kids</p>
             </div>
           </div>
 
@@ -77,17 +78,17 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center space-x-6 text-snow font-poppins font-medium text-[16px]">
-          <Link to="/cart" className="flex items-center gap-1 cursor-pointer transition-transform hover:scale-105">
+          <Link to="/cart" className="flex items-center gap-1 cursor-pointer">
             <FiShoppingCart size={24} />
             <span>My Cart</span>
           </Link>
           {user ? (
-            <div className="flex items-center gap-1 cursor-pointer transition-transform hover:scale-105">
+            <div className="flex items-center gap-1 cursor-pointer">
               <PiUserCircleBold size={24} />
               <span>{user.lastName}</span>
             </div>
           ) : (
-            <Link to="/register" className="flex items-center gap-1 cursor-pointer transition-transform hover:scale-105">
+            <Link to="/register" className="flex items-center gap-1 cursor-pointer">
               <PiUserCircleBold size={24} />
               <span>Sign up</span>
             </Link>
@@ -95,33 +96,34 @@ const Navbar = () => {
         </div>
       </div>
 
+      {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden mt-4 flex flex-col space-y-4 text-snow font-poppins font-medium text-[16px] transition-all duration-300 ease-in animate-fade-in">
+        <div className="md:hidden mt-4 flex flex-col space-y-4 text-snow font-poppins font-medium text-[16px]">
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className="flex items-center gap-1 focus:outline-none"
           >
-            Categories <FiChevronDown size={24} className={`transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : ''}`} />
+            Categories <FiChevronDown size={24} className={`transition-transform duration-300 ${dropdownOpen ? 'rotate-0' : '-rotate-90'}`} />
           </button>
           {dropdownOpen && (
-            <div className="ml-4 border-l border-mintGreen pl-4 space-y-2 transition-all">
-              <p className="cursor-pointer hover:underline transition-transform hover:scale-105">Men</p>
-              <p className="cursor-pointer hover:underline transition-transform hover:scale-105">Women</p>
-              <p className="cursor-pointer hover:underline transition-transform hover:scale-105">Kids</p>
+            <div className="ml-4 border-l border-mintGreen pl-4 space-y-2">
+              <p className="cursor-pointer hover:underline">Men</p>
+              <p className="cursor-pointer hover:underline">Women</p>
+              <p className="cursor-pointer hover:underline">Kids</p>
             </div>
           )}
-          <Link to="/shop" className={navLinkStyle('/shop')} onClick={() => setMenuOpen(false)}>Shop</Link>
+          <Link to="/shop" onClick={() => setMenuOpen(false)} className={navLinkStyle('/shop')}>Shop</Link>
           <button onClick={() => { handleProtectedRoute('/tryon'); setMenuOpen(false); }} className={navLinkStyle('/tryon')}>Virtual Try-On</button>
           <button onClick={() => { handleProtectedRoute('/chatbot'); setMenuOpen(false); }} className={navLinkStyle('/chatbot')}>AI Stylist</button>
-          <Link to="/cart" className="flex items-center gap-2 transition-transform hover:scale-105" onClick={() => setMenuOpen(false)}>
+          <Link to="/cart" onClick={() => setMenuOpen(false)} className="flex items-center gap-2">
             <FiShoppingCart size={24} /> My Cart
           </Link>
           {user ? (
-            <div className="flex items-center gap-2 transition-transform hover:scale-105">
+            <div className="flex items-center gap-2">
               <PiUserCircleBold size={24} /> {user.lastName}
             </div>
           ) : (
-            <Link to="/register" className="flex items-center gap-2 transition-transform hover:scale-105" onClick={() => setMenuOpen(false)}>
+            <Link to="/register" onClick={() => setMenuOpen(false)} className="flex items-center gap-2">
               <PiUserCircleBold size={24} /> Sign up
             </Link>
           )}
