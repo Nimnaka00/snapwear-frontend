@@ -11,6 +11,11 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import SetNewPassword from "./pages/auth/SetNewPassword";
 import OTPVerification from "./pages/auth/OTPVerification";
 import Product from "./components/Product";
+import UserDashboardLayout from "./pages/user/UserDashboardLayout";
+import PersonalData from "./components/user/PersonalData";
+import PaymentMethods from "./components/user/PaymentMethods";
+import Orders from "./components/user/Orders";
+import Notifications from "./components/user/Notifications";
 
 function App() {
   return (
@@ -27,6 +32,13 @@ function App() {
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/product1" element={<Product />} />
         <Route path="/product/:id" element={<ProductPage />} />
+
+        <Route path="/user" element={<UserDashboardLayout />}>
+          <Route path="dashboard" element={<PersonalData />} />
+          <Route path="payment" element={<PaymentMethods />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="notifications" element={<Notifications />} />
+        </Route>
       </Routes>
     </Router>
   );
