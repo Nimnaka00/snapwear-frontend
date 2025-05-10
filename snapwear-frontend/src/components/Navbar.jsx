@@ -32,7 +32,7 @@ const Navbar = () => {
     before:bg-mintGreen before:transition-all before:duration-500 hover:before:w-full before:rounded-full`;
 
   return (
-    <nav className="w-full bg-bgColor px-6 md:px-20 py-4 relative z-50">
+    <nav className="w-full h-[100px] bg-bgColor px-6 md:px-20 py-4 relative z-50">
       <div className="flex items-center justify-between">
         <Link to="/">
           <img
