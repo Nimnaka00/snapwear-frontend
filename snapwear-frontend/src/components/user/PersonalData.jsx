@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { RxCrossCircled } from "react-icons/rx";
+import closeIcon from "../../assets/close.png"
 
 const PersonalData = () => {
   const navigate = useNavigate();
@@ -34,13 +34,13 @@ const PersonalData = () => {
 
   return (
     <div className="relative w-full min-h-screen bg-snow text-textMain px-[40px] pt-[20px] pb-[80px]">
-      {/* Close button */}
-      <button
-        onClick={() => navigate("/")}
-        className="absolute top-[32px] right-[80px] w-[50px] h-[50px] flex items-center justify-center"
-      >
-        <RxCrossCircled size={30} />
-      </button>
+      {/* Close Button */}
+            <button
+              onClick={() => navigate("/")}
+              className="absolute top-[20px] right-[80px] w-[50px] h-[50px] flex items-center justify-center"
+            >
+              <img src={closeIcon} alt="Close" className="w-[30px] h-[30px]" />
+            </button>
 
       {/* Title */}
       <h2 className="text-[24px] font-medium leading-[28px] mb-[50px]">
