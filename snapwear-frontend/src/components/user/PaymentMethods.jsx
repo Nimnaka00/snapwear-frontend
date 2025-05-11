@@ -143,12 +143,14 @@ const PaymentMethods = () => {
         {/* PayPal Section */}
         {editingPaypal ? (
           <div className="relative border border-dustyGray rounded-[8px] p-4 w-[392px]">
+            <div className="pb-6">
             <img
               src={closeIcon}
               alt="Close"
               className="absolute top-[8px] right-[8px] w-[24px] h-[24px] cursor-pointer"
               onClick={() => setEditingPaypal(false)}
             />
+            </div>
             <input
               type="email"
               placeholder="PayPal Email"
