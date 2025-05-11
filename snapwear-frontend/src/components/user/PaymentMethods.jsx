@@ -17,7 +17,9 @@ const PaymentMethods = () => {
     expiry: "",
     cvv: ""
   });
+  const [originalCard, setOriginalCard] = useState(card);
   const [paypalEmail, setPaypalEmail] = useState("");
+  const [originalPaypal, setOriginalPaypal] = useState("");
 
   const handleCardInput = (e) => {
     const value = e.target.value.replace(/\D/g, "");
@@ -58,10 +60,13 @@ const PaymentMethods = () => {
               src={closeIcon}
               alt="Close"
               className="absolute top-[8px] right-[8px] w-[24px] h-[24px] cursor-pointer"
-              onClick={() => setEditingCard(false)}
+              onClick={() => {
+                setCard(originalCard);
+                setEditingCard(false);
+              }}
             />
             <div className="mb-4">
-              <p className="text-sm text-textMain mb-2">Card type:</p>
+              <p className="text-sm text-textMain text-[16px]  mb-2">Card type:</p>
               <div className="flex gap-4 items-center">
                 <label>
                   <input
@@ -131,7 +136,10 @@ const PaymentMethods = () => {
               <img
                 src={editIcon}
                 alt="Edit"
-                onClick={() => setEditingCard(true)}
+                onClick={() => {
+                  setOriginalCard(card);
+                  setEditingCard(true);
+                }}
                 className="w-[20px] h-[20px] cursor-pointer"
               />
             </div>
@@ -144,12 +152,15 @@ const PaymentMethods = () => {
         {editingPaypal ? (
           <div className="relative border border-dustyGray rounded-[8px] p-4 w-[392px]">
             <div className="pb-6">
-            <img
-              src={closeIcon}
-              alt="Close"
-              className="absolute top-[8px] right-[8px] w-[24px] h-[24px] cursor-pointer"
-              onClick={() => setEditingPaypal(false)}
-            />
+              <img
+                src={closeIcon}
+                alt="Close"
+                className="absolute top-[8px] right-[8px] w-[24px] h-[24px] cursor-pointer"
+                onClick={() => {
+                  setPaypalEmail(originalPaypal);
+                  setEditingPaypal(false);
+                }}
+              />
             </div>
             <input
               type="email"
@@ -174,7 +185,10 @@ const PaymentMethods = () => {
               <img
                 src={editIcon}
                 alt="Edit"
-                onClick={() => setEditingPaypal(true)}
+                onClick={() => {
+                  setOriginalPaypal(paypalEmail);
+                  setEditingPaypal(true);
+                }}
                 className="w-[20px] h-[20px] cursor-pointer"
               />
             </div>
