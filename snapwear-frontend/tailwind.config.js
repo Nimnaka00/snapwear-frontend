@@ -17,6 +17,7 @@ export default {
         bgColor: '#13151B',
         lineGray: 'rgba(102, 102, 102, 0.25)', 
         cardBg: 'rgba(251, 251, 251, 0.2)',  
+        footerBg: '#23252D'
       },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
