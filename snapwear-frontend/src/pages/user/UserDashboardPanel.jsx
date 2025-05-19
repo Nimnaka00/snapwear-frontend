@@ -1,12 +1,25 @@
+// src/components/user/DashboardPanel.jsx
+import React, { useState, useEffect } from "react";
 import { FaUser } from "react-icons/fa";
 import { PiSignOutBold } from "react-icons/pi";
 import { FiCreditCard, FiBell } from "react-icons/fi";
 import { BsBag } from "react-icons/bs";
 import { NavLink, useNavigate } from "react-router-dom";
-import React from "react";
 
 const DashboardPanel = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("snapwear-user");
+    if (stored) {
+      try {
+        setUser(JSON.parse(stored));
+      } catch {
+        setUser(null);
+      }
+    }
+  }, []);
 
   const navLinks = [
     { name: "Personal Data", path: "/user/dashboard", icon: FaUser },
@@ -36,7 +49,11 @@ const DashboardPanel = () => {
         <div className="w-[70px] h-[70px] bg-gray-200 rounded-full flex items-center justify-center">
           <FaUser size={32} className="text-textMain" />
         </div>
-        <p className="text-[24px] font-medium text-textMain">Induja Nimnaka</p>
+        <p className="text-[24px] font-medium text-textMain">
+          {user
+            ? `${user.firstName} ${user.lastName}`
+            : "Guest"}
+        </p>
       </div>
 
       {/* Navigation */}
@@ -44,14 +61,15 @@ const DashboardPanel = () => {
         {navLinks.map(({ name, path, icon: Icon, isLogout }) => {
           const baseClasses =
             "group flex items-center w-full h-[60px] px-12 text-[20px] font-light transition";
-
           const iconBase = "w-[25px] h-[25px]";
 
           const renderContent = (isActive) => (
             <>
               <Icon
                 className={`${iconBase} mr-[56px] ${
-                  isActive ? "text-snow" : "text-gluconGray group-hover:text-snow"
+                  isActive
+                    ? "text-snow"
+                    : "text-gluconGray group-hover:text-snow"
                 }`}
               />
               <span>{name}</span>
