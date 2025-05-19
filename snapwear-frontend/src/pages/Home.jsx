@@ -3,6 +3,7 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import AIAndVirtualTryOn from '../components/AIAndVirtualTryOn';
+import FeaturedProducts from "../components/FeaturedProducts";
 
 const Home = () => {
   return (
@@ -10,6 +11,7 @@ const Home = () => {
       <Navbar />
       <HeroSection />
       <AIAndVirtualTryOn/>
+      <FeaturedProducts/>
     </div>
   );
 };
