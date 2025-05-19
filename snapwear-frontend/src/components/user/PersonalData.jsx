@@ -1,90 +1,171 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import closeIcon from "../../assets/close.png"
+// src/components/user/PersonalData.jsx
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import API from '../../utils/api';
 
 const PersonalData = () => {
   const navigate = useNavigate();
-  const [isEditing, setIsEditing] = useState(false);
+
+  // Form state
   const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    oldPassword: "",
-    newPassword: "",
-    confirmPassword: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
   });
-  const [showPassword, setShowPassword] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [updatingPassword, setUpdatingPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Load profile on mount
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await API.get('/api/users/profile');
+        setForm(prev => ({
+          ...prev,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+        }));
+      } catch (err) {
+        toast.error('Failed to load profile.');
+      } finally {
+        setLoadingProfile(false);
+      }
+    })();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm(prev => ({ ...prev, [name]: value }));
   };
 
   const handleEdit = () => setIsEditing(true);
-  const handleCancel = () => setIsEditing(false);
-
-  const handleSave = () => {
-    console.log("Saving changes:", form);
+  const handleCancel = () => {
+    // revert changes
     setIsEditing(false);
+    setLoadingProfile(true);
+    API.get('/api/users/profile')
+      .then(({ data }) => {
+        setForm(prev => ({
+          ...prev,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+        }));
+      })
+      .catch(() => toast.error('Failed to revert changes.'))
+      .finally(() => setLoadingProfile(false));
   };
 
-  const handlePasswordChange = () => {
-    console.log("Password updated:", form.newPassword);
+  const handleSave = async () => {
+    setSavingProfile(true);
+    try {
+      const payload = {
+        firstName: form.firstName,
+        lastName:  form.lastName,
+        email:     form.email,
+      };
+      await API.put('/api/users/profile', payload);
+      toast.success('Profile updated successfully.');
+      setIsEditing(false);
+
+      // Sync updated name/email into localStorage so DashboardPanel shows the new values
+      const stored = JSON.parse(localStorage.getItem('snapwear-user')) || {};
+      const updatedUser = {
+        ...stored,
+        firstName: form.firstName,
+        lastName:  form.lastName,
+        email:     form.email,
+      };
+      localStorage.setItem('snapwear-user', JSON.stringify(updatedUser));
+
+      // Reload to remount DashboardPanel and pick up the new user data
+      window.location.reload();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Profile update failed.');
+    } finally {
+      setSavingProfile(false);
+    }
   };
+
+  const handlePasswordChange = async () => {
+    if (form.newPassword !== form.confirmPassword) {
+      toast.error('Passwords do not match.');
+      return;
+    }
+    setUpdatingPassword(true);
+    try {
+      await API.put('/api/users/profile/password', {
+        oldPassword: form.oldPassword,
+        newPassword: form.newPassword,
+        confirmPassword: form.confirmPassword,
+      });
+      toast.success('Password updated successfully.');
+      // clear out password fields
+      setForm(prev => ({
+        ...prev,
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      }));
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Password update failed.');
+    } finally {
+      setUpdatingPassword(false);
+    }
+  };
+
+  if (loadingProfile) return <p className="p-8">Loading profile…</p>;
 
   return (
     <div className="relative w-full min-h-screen bg-snow text-textMain px-[40px] pt-[20px] pb-[80px]">
       {/* Close Button */}
-            <button
-              onClick={() => navigate("/")}
-              className="absolute top-[20px] right-[80px] w-[50px] h-[50px] flex items-center justify-center"
-            >
-              <img src={closeIcon} alt="Close" className="w-[30px] h-[30px]" />
-            </button>
+      <button
+        onClick={() => navigate('/user/dashboard')}
+        className="absolute top-[20px] right-[80px] w-[50px] h-[50px] flex items-center justify-center"
+      >
+        ✕
+      </button>
 
       {/* Title */}
       <h2 className="text-[24px] font-medium leading-[28px] mb-[50px]">
         Identification
       </h2>
 
-      {/* Identity Section */}
+      {/* Profile Section */}
       <div className="mb-[38px]">
         <p className="text-[16px] font-normal text-textMain mb-4">
           Verify your identity
         </p>
         <div className="flex flex-col md:flex-row gap-[26px] mb-4">
-          <div className="flex flex-col">
-            <label
-              htmlFor="firstName"
-              className="text-[16px] font-medium text-dustyGray mb-1"
-            >
-              First name
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={form.firstName}
-              onChange={handleChange}
-              className="w-[259px] h-[48px] border border-dustyGray rounded-[8px] px-4 text-[14px]"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label
-              htmlFor="lastName"
-              className="text-[16px] font-medium text-dustyGray mb-1"
-            >
-              Last name
-            </label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={form.lastName}
-              onChange={handleChange}
-              className="w-[259px] h-[48px] border border-dustyGray rounded-[8px] px-4 text-[14px]"
-            />
-          </div>
+          {['firstName','lastName'].map((field) => (
+            <div key={field} className="flex flex-col">
+              <label
+                htmlFor={field}
+                className="text-[16px] font-medium text-dustyGray mb-1"
+              >
+                {field === 'firstName' ? 'First name' : 'Last name'}
+              </label>
+              <input
+                type="text"
+                id={field}
+                name={field}
+                value={form[field]}
+                onChange={handleChange}
+                disabled={!isEditing}
+                className={`w-[259px] h-[48px] border border-dustyGray rounded-[8px] px-4 text-[14px] ${
+                  !isEditing ? 'bg-gray-100 cursor-not-allowed' : ''
+                }`}
+              />
+            </div>
+          ))}
         </div>
 
         <div className="flex flex-col mb-4">
@@ -100,7 +181,10 @@ const PersonalData = () => {
             name="email"
             value={form.email}
             onChange={handleChange}
-            className="w-[543px] h-[48px] border border-dustyGray rounded-[8px] px-4 text-[14px]"
+            disabled={!isEditing}
+            className={`w-[543px] h-[48px] border border-dustyGray rounded-[8px] px-4 text-[14px] ${
+              !isEditing ? 'bg-gray-100 cursor-not-allowed' : ''
+            }`}
           />
         </div>
 
@@ -109,15 +193,17 @@ const PersonalData = () => {
             <div className="flex gap-4">
               <button
                 onClick={handleCancel}
+                disabled={savingProfile}
                 className="w-[200px] h-[36px] border border-russianViolet text-russianViolet text-[16px] font-medium rounded-[8px]"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
+                disabled={savingProfile}
                 className="w-[200px] h-[36px] bg-russianViolet text-snow text-[16px] font-medium rounded-[8px]"
               >
-                Save
+                {savingProfile ? 'Saving…' : 'Save'}
               </button>
             </div>
           ) : (
@@ -137,21 +223,21 @@ const PersonalData = () => {
           Edit your password
         </p>
 
-        <div className="flex flex-col gap-[14px] mb-0">
-          {[
-            { name: "oldPassword", label: "Old password" },
-            { name: "newPassword", label: "New password" },
-            { name: "confirmPassword", label: "Confirm new password" },
-          ].map(({ name, label }) => (
-            <div key={name} className="flex flex-col">
+        {['oldPassword','newPassword','confirmPassword'].map((name) => {
+          const lbl = 
+            name === 'oldPassword' ? 'Old password' :
+            name === 'newPassword' ? 'New password' :
+            'Confirm new password';
+          return (
+            <div key={name} className="flex flex-col mb-[14px]">
               <label
                 htmlFor={name}
                 className="text-[16px] font-medium text-dustyGray mb-1"
               >
-                {label}
+                {lbl}
               </label>
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 id={name}
                 name={name}
                 value={form[name]}
@@ -159,12 +245,8 @@ const PersonalData = () => {
                 className="w-[543px] h-[48px] border border-dustyGray rounded-[8px] px-4 text-[14px]"
               />
             </div>
-          ))}
-        </div>
-
-        <p className="w-[529px] text-[16px] font-normal text-dustyGray mt-0 mb-4">
-          Use 8 or more characters with a mix of letters, numbers & symbols
-        </p>
+          );
+        })}
 
         <div className="flex justify-between items-center w-[543px] mb-3">
           <div className="flex items-center gap-2">
@@ -174,18 +256,16 @@ const PersonalData = () => {
               checked={showPassword}
               onChange={() => setShowPassword(!showPassword)}
             />
-            <label
-              htmlFor="showPassword"
-              className="text-[16px] font-medium text-textMain"
-            >
+            <label htmlFor="showPassword" className="text-[16px] font-medium">
               Show password
             </label>
           </div>
           <button
             onClick={handlePasswordChange}
+            disabled={updatingPassword}
             className="w-[200px] h-[36px] bg-russianViolet text-snow text-[14px] font-medium rounded-[8px]"
           >
-            Edit password
+            {updatingPassword ? 'Updating…' : 'Edit password'}
           </button>
         </div>
       </div>
