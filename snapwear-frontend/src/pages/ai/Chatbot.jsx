@@ -31,9 +31,14 @@ const Chatbot = () => {
 
   const sendToBackend = async (message) => {
     const response = await axios.post("http://localhost:8000/api/v1/chat", {
-      message,
+      messages: [
+        {
+          role: "user",
+          content: message,
+        },
+      ],
     });
-    return response.data.reply;
+    return response.data.response;
   };
 
   const handleSend = async (e) => {
@@ -54,7 +59,12 @@ const Chatbot = () => {
         setLoading(false);
         setMessages((prev) => [
           ...prev,
-          { role: "ai", type: "text", content: aiReply, originalUserInput: input },
+          {
+            role: "ai",
+            type: "text",
+            content: aiReply,
+            originalUserInput: input,
+          },
         ]);
       }, 1000);
     } catch (error) {
@@ -89,7 +99,6 @@ const Chatbot = () => {
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-[#13151B] flex flex-col items-center justify-between text-[#FBFBFB] font-poppins">
-
       {/* Background */}
       <img
         src={gradientBg}
@@ -104,7 +113,7 @@ const Chatbot = () => {
           alt="AI Logo"
           className={`w-8 h-8 mb-4 ${animateStar ? "animate-pulse" : ""}`}
         />
-        <h1 className="text-[24px] font-normal" style={{ color: '#FBFBFB' }}>
+        <h1 className="text-[24px] font-normal" style={{ color: "#FBFBFB" }}>
           Ask our AI about fashion
         </h1>
       </div>
@@ -114,7 +123,9 @@ const Chatbot = () => {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`flex flex-col items-start ${msg.role === "me" ? "items-end" : "items-start"}`}
+            className={`flex flex-col items-start ${
+              msg.role === "me" ? "items-end" : "items-start"
+            }`}
           >
             <div className="flex items-start">
               {msg.role === "ai" && (
@@ -125,7 +136,7 @@ const Chatbot = () => {
                 />
               )}
               <div
-                className={`px-4 py-2 rounded-md max-w-xs text-sm flex items-center justify-center ${
+                className={`px-4 py-2 rounded-md max-w-xs text-sm flex items-start justify-start ${
                   msg.role === "me"
                     ? "bg-[#ffffff20] text-white border border-white"
                     : "bg-transparent text-white border border-[#ffffff40]"
@@ -134,7 +145,7 @@ const Chatbot = () => {
                 {regeneratingIndex === index ? (
                   <div className="w-32 h-5 bg-gray-300 animate-pulse opacity-30"></div>
                 ) : (
-                  msg.content
+                  <div dangerouslySetInnerHTML={{ __html: msg.content }} />
                 )}
               </div>
               {msg.role === "me" && (
@@ -155,13 +166,14 @@ const Chatbot = () => {
               >
                 {regeneratingIndex === index ? (
                   <>
-                    <AiOutlineLoading3Quarters className="animate-spin" size={14} />
+                    <AiOutlineLoading3Quarters
+                      className="animate-spin"
+                      size={14}
+                    />
                     Regenerating...
                   </>
                 ) : (
-                  <>
-                    🔁 Regenerate
-                  </>
+                  <>🔁 Regenerate</>
                 )}
               </button>
             )}
@@ -205,7 +217,10 @@ const Chatbot = () => {
           }`}
         >
           {loading || typing ? (
-            <AiOutlineLoading3Quarters className="animate-spin text-[#D6FFF6]" size={20} />
+            <AiOutlineLoading3Quarters
+              className="animate-spin text-[#D6FFF6]"
+              size={20}
+            />
           ) : (
             <FiSend size={20} className="text-[#D6FFF6]" />
           )}
