@@ -107,4 +107,4 @@ npm run preview   # Preview production build
 
 ## 📄 License
 
-MIT © [Your Name](https://github.com/yourusername)
+MIT © [Your Name](https://github.com/Nimnaka00)
