@@ -16,6 +16,11 @@ import PersonalData from "./components/user/PersonalData";
 import PaymentMethods from "./components/user/PaymentMethods";
 import Orders from "./components/user/Orders";
 import Notifications from "./components/user/Notifications";
+import CartPage from "./pages/cart and checkout/CartPage";
+import CheckoutPage from "./pages/cart and checkout/CheckoutPage";
+import OrderFailedModal from "./pages/cart and checkout/OrderFaildModal";
+import OrderSuccessModal from "./pages/cart and checkout/OrderSuccessModal";
+import PaymentPage from "./pages/cart and checkout/PaymentPage";
 
 function App() {
   return (
@@ -39,6 +44,12 @@ function App() {
           <Route path="orders" element={<Orders />} />
           <Route path="notifications" element={<Notifications />} />
         </Route>
+
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/ordersuccessmodel" element={<OrderSuccessModal />} />
+        <Route path="/orderfailedmodel" element={<OrderFailedModal />} />
       </Routes>
     </Router>
   );
