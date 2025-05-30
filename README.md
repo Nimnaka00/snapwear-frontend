@@ -94,8 +94,8 @@ npm run preview   # Preview production build
 
 ## 🔗 Connected Services
 
-- 🌐 [Snapwear Backend](https://github.com/yourusername/snapwear-backend)
-- 🧠 [Snapwear AI Service](https://github.com/yourusername/snapwear-ai-service)
+- 🌐 [Snapwear Backend](https://github.com/Nimnaka00/snapwear-backend)
+- 🧠 [Snapwear AI Service](https://github.com/Nimnaka00/snapwear-ai-service)
 
 ---
 
