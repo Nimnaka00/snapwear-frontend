@@ -1,20 +1,21 @@
 // src/components/user/PersonalData.jsx
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import API from '../../utils/api';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import API from "../../utils/api";
+import closeIcon from "../../assets/close.png";
 
 const PersonalData = () => {
   const navigate = useNavigate();
 
   // Form state
   const [form, setForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    oldPassword: '',
-    newPassword: '',
-    confirmPassword: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   });
   const [isEditing, setIsEditing] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
@@ -26,15 +27,15 @@ const PersonalData = () => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await API.get('/api/users/profile');
-        setForm(prev => ({
+        const { data } = await API.get("/api/users/profile");
+        setForm((prev) => ({
           ...prev,
           firstName: data.firstName,
           lastName: data.lastName,
           email: data.email,
         }));
       } catch (err) {
-        toast.error('Failed to load profile.');
+        toast.error("Failed to load profile.");
       } finally {
         setLoadingProfile(false);
       }
@@ -43,7 +44,7 @@ const PersonalData = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleEdit = () => setIsEditing(true);
@@ -51,16 +52,16 @@ const PersonalData = () => {
     // revert changes
     setIsEditing(false);
     setLoadingProfile(true);
-    API.get('/api/users/profile')
+    API.get("/api/users/profile")
       .then(({ data }) => {
-        setForm(prev => ({
+        setForm((prev) => ({
           ...prev,
           firstName: data.firstName,
           lastName: data.lastName,
           email: data.email,
         }));
       })
-      .catch(() => toast.error('Failed to revert changes.'))
+      .catch(() => toast.error("Failed to revert changes."))
       .finally(() => setLoadingProfile(false));
   };
 
@@ -69,27 +70,27 @@ const PersonalData = () => {
     try {
       const payload = {
         firstName: form.firstName,
-        lastName:  form.lastName,
-        email:     form.email,
+        lastName: form.lastName,
+        email: form.email,
       };
-      await API.put('/api/users/profile', payload);
-      toast.success('Profile updated successfully.');
+      await API.put("/api/users/profile", payload);
+      toast.success("Profile updated successfully.");
       setIsEditing(false);
 
       // Sync updated name/email into localStorage so DashboardPanel shows the new values
-      const stored = JSON.parse(localStorage.getItem('snapwear-user')) || {};
+      const stored = JSON.parse(localStorage.getItem("snapwear-user")) || {};
       const updatedUser = {
         ...stored,
         firstName: form.firstName,
-        lastName:  form.lastName,
-        email:     form.email,
+        lastName: form.lastName,
+        email: form.email,
       };
-      localStorage.setItem('snapwear-user', JSON.stringify(updatedUser));
+      localStorage.setItem("snapwear-user", JSON.stringify(updatedUser));
 
       // Reload to remount DashboardPanel and pick up the new user data
       window.location.reload();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Profile update failed.');
+      toast.error(err.response?.data?.message || "Profile update failed.");
     } finally {
       setSavingProfile(false);
     }
@@ -97,26 +98,26 @@ const PersonalData = () => {
 
   const handlePasswordChange = async () => {
     if (form.newPassword !== form.confirmPassword) {
-      toast.error('Passwords do not match.');
+      toast.error("Passwords do not match.");
       return;
     }
     setUpdatingPassword(true);
     try {
-      await API.put('/api/users/profile/password', {
+      await API.put("/api/users/profile/password", {
         oldPassword: form.oldPassword,
         newPassword: form.newPassword,
         confirmPassword: form.confirmPassword,
       });
-      toast.success('Password updated successfully.');
+      toast.success("Password updated successfully.");
       // clear out password fields
-      setForm(prev => ({
+      setForm((prev) => ({
         ...prev,
-        oldPassword: '',
-        newPassword: '',
-        confirmPassword: '',
+        oldPassword: "",
+        newPassword: "",
+        confirmPassword: "",
       }));
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Password update failed.');
+      toast.error(err.response?.data?.message || "Password update failed.");
     } finally {
       setUpdatingPassword(false);
     }
@@ -128,10 +129,10 @@ const PersonalData = () => {
     <div className="relative w-full min-h-screen bg-snow text-textMain px-[40px] pt-[20px] pb-[80px]">
       {/* Close Button */}
       <button
-        onClick={() => navigate('/user/dashboard')}
+        onClick={() => navigate("/")}
         className="absolute top-[20px] right-[80px] w-[50px] h-[50px] flex items-center justify-center"
       >
-        ✕
+        <img src={closeIcon} alt="Close" className="w-[30px] h-[30px]" />
       </button>
 
       {/* Title */}
@@ -145,13 +146,13 @@ const PersonalData = () => {
           Verify your identity
         </p>
         <div className="flex flex-col md:flex-row gap-[26px] mb-4">
-          {['firstName','lastName'].map((field) => (
+          {["firstName", "lastName"].map((field) => (
             <div key={field} className="flex flex-col">
               <label
                 htmlFor={field}
                 className="text-[16px] font-medium text-dustyGray mb-1"
               >
-                {field === 'firstName' ? 'First name' : 'Last name'}
+                {field === "firstName" ? "First name" : "Last name"}
               </label>
               <input
                 type="text"
@@ -161,7 +162,7 @@ const PersonalData = () => {
                 onChange={handleChange}
                 disabled={!isEditing}
                 className={`w-[259px] h-[48px] border border-dustyGray rounded-[8px] px-4 text-[14px] ${
-                  !isEditing ? 'bg-gray-100 cursor-not-allowed' : ''
+                  !isEditing ? "bg-gray-100 cursor-not-allowed" : ""
                 }`}
               />
             </div>
@@ -183,7 +184,7 @@ const PersonalData = () => {
             onChange={handleChange}
             disabled={!isEditing}
             className={`w-[543px] h-[48px] border border-dustyGray rounded-[8px] px-4 text-[14px] ${
-              !isEditing ? 'bg-gray-100 cursor-not-allowed' : ''
+              !isEditing ? "bg-gray-100 cursor-not-allowed" : ""
             }`}
           />
         </div>
@@ -203,7 +204,7 @@ const PersonalData = () => {
                 disabled={savingProfile}
                 className="w-[200px] h-[36px] bg-russianViolet text-snow text-[16px] font-medium rounded-[8px]"
               >
-                {savingProfile ? 'Saving…' : 'Save'}
+                {savingProfile ? "Saving…" : "Save"}
               </button>
             </div>
           ) : (
@@ -223,11 +224,13 @@ const PersonalData = () => {
           Edit your password
         </p>
 
-        {['oldPassword','newPassword','confirmPassword'].map((name) => {
-          const lbl = 
-            name === 'oldPassword' ? 'Old password' :
-            name === 'newPassword' ? 'New password' :
-            'Confirm new password';
+        {["oldPassword", "newPassword", "confirmPassword"].map((name) => {
+          const lbl =
+            name === "oldPassword"
+              ? "Old password"
+              : name === "newPassword"
+              ? "New password"
+              : "Confirm new password";
           return (
             <div key={name} className="flex flex-col mb-[14px]">
               <label
@@ -237,7 +240,7 @@ const PersonalData = () => {
                 {lbl}
               </label>
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 id={name}
                 name={name}
                 value={form[name]}
@@ -265,7 +268,7 @@ const PersonalData = () => {
             disabled={updatingPassword}
             className="w-[200px] h-[36px] bg-russianViolet text-snow text-[14px] font-medium rounded-[8px]"
           >
-            {updatingPassword ? 'Updating…' : 'Edit password'}
+            {updatingPassword ? "Updating…" : "Edit password"}
           </button>
         </div>
       </div>
