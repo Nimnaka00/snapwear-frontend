@@ -1,28 +1,29 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// src/pages/auth/Register.jsx
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import logo from '../../assets/Logo.png';
-import SignupImage from '../../assets/Signup_image.png';
-import API from '../../utils/api';
+import logo from "../../assets/Logo.png";
+import SignupImage from "../../assets/Signup_image.png";
+import API from "../../utils/api";
 
 const Register = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -30,51 +31,63 @@ const Register = () => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error("Passwords do not match");
       return;
     }
 
     try {
       // Register
-      await API.post('/api/auth/register', {
+      await API.post("/api/auth/register", {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
-        password: formData.password
+        password: formData.password,
       });
 
       // Auto-login
-      const loginRes = await API.post('/api/auth/login', {
+      const loginRes = await API.post("/api/auth/login", {
         email: formData.email,
-        password: formData.password
+        password: formData.password,
       });
 
-      localStorage.setItem('snapwear-token', loginRes.data.token);
-      localStorage.setItem('snapwear-user', JSON.stringify(loginRes.data.user));
+      localStorage.setItem("snapwear-token", loginRes.data.token);
+      localStorage.setItem("snapwear-user", JSON.stringify(loginRes.data.user));
 
-      toast.success('🎉 Account created successfully!');
-      navigate('/');
+      toast.success("🎉 Account created successfully!");
+      navigate("/");
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Registration failed');
+      toast.error(error.response?.data?.message || "Registration failed");
     }
   };
 
   return (
     <div className="min-h-screen bg-snow px-5 md:px-[80px] py-8">
-      <img src={logo} alt="Logo" className="h-[81.47px] w-[117px] mb-8" />
+      {/* Logo -> Home */}
+      <Link to="/" aria-label="Go to home">
+        <img src={logo} alt="SnapWear" className="h-[81.47px] w-[117px] mb-8" />
+      </Link>
 
       <div className="mx-auto max-w-[999px] w-full bg-snow rounded-[32px] shadow-[6px_6px_20px_1px_rgba(0,0,0,0.25)] flex flex-col md:flex-row overflow-hidden h-[546px]">
         <div className="flex flex-col justify-center px-6 md:px-12 py-8 w-full md:w-[591px]">
-          <h1 className="text-[38px] font-semibold leading-[58px] text-textMain mb-2">Create an account</h1>
+          <h1 className="text-[38px] font-semibold leading-[58px] text-textMain mb-2">
+            Create an account
+          </h1>
           <p className="text-[16px] font-medium text-textMain mb-2">
-            Already have an account?{' '}
-            <a href="/login" className="ml-[13px] underline">Log in</a>
+            Already have an account?{" "}
+            <Link to="/login" className="ml-[13px] underline">
+              Log in
+            </Link>
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-col md:flex-row gap-[26px]">
               <div className="flex flex-col">
-                <label htmlFor="firstName" className="text-dustyGray text-[16px] font-medium mb-1">First name</label>
+                <label
+                  htmlFor="firstName"
+                  className="text-dustyGray text-[16px] font-medium mb-1"
+                >
+                  First name
+                </label>
                 <input
                   type="text"
                   name="firstName"
@@ -86,7 +99,12 @@ const Register = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="lastName" className="text-dustyGray text-[16px] font-medium mb-1">Last name</label>
+                <label
+                  htmlFor="lastName"
+                  className="text-dustyGray text-[16px] font-medium mb-1"
+                >
+                  Last name
+                </label>
                 <input
                   type="text"
                   name="lastName"
@@ -100,7 +118,12 @@ const Register = () => {
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="email" className="text-dustyGray text-[16px] font-medium mb-1">Email address</label>
+              <label
+                htmlFor="email"
+                className="text-dustyGray text-[16px] font-medium mb-1"
+              >
+                Email address
+              </label>
               <input
                 type="email"
                 name="email"
@@ -114,9 +137,14 @@ const Register = () => {
 
             <div className="flex flex-col md:flex-row gap-[26px]">
               <div className="flex flex-col">
-                <label htmlFor="password" className="text-dustyGray text-[16px] font-medium mb-1">Password</label>
+                <label
+                  htmlFor="password"
+                  className="text-dustyGray text-[16px] font-medium mb-1"
+                >
+                  Password
+                </label>
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   id="password"
                   value={formData.password}
@@ -126,9 +154,14 @@ const Register = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="confirmPassword" className="text-dustyGray text-[16px] font-medium mb-1">Confirm your password</label>
+                <label
+                  htmlFor="confirmPassword"
+                  className="text-dustyGray text-[16px] font-medium mb-1"
+                >
+                  Confirm your password
+                </label>
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   name="confirmPassword"
                   id="confirmPassword"
                   value={formData.confirmPassword}
@@ -150,13 +183,21 @@ const Register = () => {
                 checked={showPassword}
                 onChange={() => setShowPassword(!showPassword)}
               />
-              <label htmlFor="showPassword" className="text-textMain text-[16px] font-medium">Show password</label>
+              <label
+                htmlFor="showPassword"
+                className="text-textMain text-[16px] font-medium"
+              >
+                Show password
+              </label>
             </div>
 
             <div className="flex justify-between items-center pt-0 flex-wrap md:flex-nowrap md:items-center mt-[-12px] gap-[112px]">
-              <a href="/login" className="text-textMain text-[16px] font-medium underline">
+              <Link
+                to="/login"
+                className="text-textMain text-[16px] font-medium underline"
+              >
                 Log in instead
-              </a>
+              </Link>
               <button
                 type="submit"
                 className="bg-russianViolet text-snow w-[256px] h-[64px] rounded-[32px] text-[16px] font-medium self-end"
@@ -168,7 +209,11 @@ const Register = () => {
         </div>
 
         <div className="w-full md:w-[408px] h-full hidden md:block">
-          <img src={SignupImage} alt="Sign up visual" className="w-full h-full object-cover" />
+          <img
+            src={SignupImage}
+            alt="Sign up visual"
+            className="w-full h-full object-cover"
+          />
         </div>
       </div>
     </div>
