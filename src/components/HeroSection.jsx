@@ -1,5 +1,6 @@
 // src/components/HeroSection.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 import heroImg from "../assets/home/Hero.png";
 
 const HeroSection = () => {
@@ -41,12 +42,14 @@ const HeroSection = () => {
         {/* 25px gap */}
         <div style={{ height: "25px" }} />
 
-        {/* Button */}
-        <button
-          className="w-[119px] h-[44px] rounded-[8px] border-2 border-mintGreen bg-bgColor/40 text-[16px] font-medium font-poppins text-mintGreen"
+        {/* Button -> Link to /shop */}
+        <Link
+          to="/shop"
+          className="inline-flex items-center justify-center w-[119px] h-[44px] rounded-[8px] border-2 border-mintGreen bg-bgColor/40 text-[16px] font-medium font-poppins text-mintGreen"
+          aria-label="Shop now"
         >
           Shop now
-        </button>
+        </Link>
       </div>
     </section>
   );
